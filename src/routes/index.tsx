@@ -1,24 +1,107 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/site/Header";
+import { Footer } from "@/components/site/Footer";
+import { WhatsAppFab } from "@/components/site/WhatsAppFab";
+import {
+  Avaliacoes,
+  Colecoes,
+  Contato,
+  CtaFinal,
+  Diferenciais,
+  Faq,
+  Galeria,
+  Hero,
+  InstagramFeed,
+  Lancamentos,
+  MaisVendidos,
+  Newsletter,
+  PorQue,
+  Sobre,
+} from "@/components/site/Sections";
+import { faqs, WHATSAPP_DISPLAY } from "@/lib/site";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Reizinho Joias | Elegância, Exclusividade e Sofisticação";
+const description =
+  "Conheça a Reizinho Joias. Joias premium, atendimento personalizado e compra fácil pelo WhatsApp.";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { property: "og:locale", content: "pt_BR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "JewelryStore",
+          name: "Reizinho Joias",
+          description,
+          telephone: WHATSAPP_DISPLAY,
+          priceRange: "$$",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Macaé",
+            addressRegion: "RJ",
+            addressCountry: "BR",
+          },
+          openingHours: ["Mo-Fr 09:00-18:00", "Sa 09:00-13:00"],
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: "5",
+            reviewCount: "128",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <Header />
+      <main>
+        <Hero />
+        <Diferenciais />
+        <Colecoes />
+        <Lancamentos />
+        <MaisVendidos />
+        <Galeria />
+        <Sobre />
+        <PorQue />
+        <Avaliacoes />
+        <InstagramFeed />
+        <Faq />
+        <Newsletter />
+        <CtaFinal />
+        <Contato />
+      </main>
+      <Footer />
+      <WhatsAppFab />
+    </>
   );
 }
