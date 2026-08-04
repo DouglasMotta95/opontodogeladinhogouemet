@@ -82,7 +82,7 @@ function ProductPage() {
               />
             </div>
             <div className="mt-5 grid grid-cols-3 gap-4">
-              {product.gallery.map((src, i) => (
+              {product.gallery.map((src: string, i: number) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
@@ -125,7 +125,7 @@ function ProductPage() {
             </p>
 
             <ul className="mt-8 space-y-3">
-              {product.caracteristicas.map((c) => (
+              {product.caracteristicas.map((c: string) => (
                 <li key={c} className="flex items-start gap-3 text-sm text-ink/80">
                   <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} />
                   {c}
