@@ -10,11 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CardapioRouteImport } from './routes/cardapio'
+import { Route as PedidoIndexRouteImport } from './routes/pedido.index'
+import { Route as PedidoTokenRouteImport } from './routes/pedido.$token'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as ApiPublicWebhooksMercadopagoRouteImport } from './routes/api/public/webhooks/mercadopago'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardapioRoute = CardapioRouteImport.update({
+  id: '/cardapio',
+  path: '/cardapio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PedidoIndexRoute = PedidoIndexRouteImport.update({
+  id: '/pedido/',
+  path: '/pedido/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PedidoTokenRoute = PedidoTokenRouteImport.update({
+  id: '/pedido/$token',
+  path: '/pedido/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicWebhooksMercadopagoRoute =
@@ -26,27 +50,62 @@ const ApiPublicWebhooksMercadopagoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cardapio': typeof CardapioRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido/': typeof PedidoIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cardapio': typeof CardapioRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido': typeof PedidoIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cardapio': typeof CardapioRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido/': typeof PedidoIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/webhooks/mercadopago'
+  fullPaths:
+    | '/'
+    | '/cardapio'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido/'
+    | '/api/public/webhooks/mercadopago'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/webhooks/mercadopago'
-  id: '__root__' | '/' | '/api/public/webhooks/mercadopago'
+  to:
+    | '/'
+    | '/cardapio'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido'
+    | '/api/public/webhooks/mercadopago'
+  id:
+    | '__root__'
+    | '/'
+    | '/cardapio'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido/'
+    | '/api/public/webhooks/mercadopago'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CardapioRoute: typeof CardapioRoute
+  PedidoTokenRoute: typeof PedidoTokenRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
+  PedidoIndexRoute: typeof PedidoIndexRoute
   ApiPublicWebhooksMercadopagoRoute: typeof ApiPublicWebhooksMercadopagoRoute
 }
 
@@ -57,6 +116,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cardapio': {
+      id: '/cardapio'
+      path: '/cardapio'
+      fullPath: '/cardapio'
+      preLoaderRoute: typeof CardapioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pedido/': {
+      id: '/pedido/'
+      path: '/pedido'
+      fullPath: '/pedido/'
+      preLoaderRoute: typeof PedidoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pedido/$token': {
+      id: '/pedido/$token'
+      path: '/pedido/$token'
+      fullPath: '/pedido/$token'
+      preLoaderRoute: typeof PedidoTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/webhooks/mercadopago': {
@@ -71,6 +158,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CardapioRoute: CardapioRoute,
+  PedidoTokenRoute: PedidoTokenRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
+  PedidoIndexRoute: PedidoIndexRoute,
   ApiPublicWebhooksMercadopagoRoute: ApiPublicWebhooksMercadopagoRoute,
 }
 export const routeTree = rootRouteImport
