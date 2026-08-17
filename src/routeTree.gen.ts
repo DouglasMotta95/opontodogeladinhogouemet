@@ -10,53 +10,129 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ProdutosSlugRouteImport } from './routes/produtos.$slug'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CardapioRouteImport } from './routes/cardapio'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as PedidoIndexRouteImport } from './routes/pedido.index'
+import { Route as PedidoTokenRouteImport } from './routes/pedido.$token'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as ApiPublicWebhooksMercadopagoRouteImport } from './routes/api/public/webhooks/mercadopago'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProdutosSlugRoute = ProdutosSlugRouteImport.update({
-  id: '/produtos/$slug',
-  path: '/produtos/$slug',
+const CardapioRoute = CardapioRouteImport.update({
+  id: '/cardapio',
+  path: '/cardapio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PedidoIndexRoute = PedidoIndexRouteImport.update({
+  id: '/pedido/',
+  path: '/pedido/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PedidoTokenRoute = PedidoTokenRouteImport.update({
+  id: '/pedido/$token',
+  path: '/pedido/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicWebhooksMercadopagoRoute =
+  ApiPublicWebhooksMercadopagoRouteImport.update({
+    id: '/api/public/webhooks/mercadopago',
+    path: '/api/public/webhooks/mercadopago',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/produtos/$slug': typeof ProdutosSlugRoute
+  '/admin': typeof AdminRoute
+  '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido/': typeof PedidoIndexRoute
+  '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/produtos/$slug': typeof ProdutosSlugRoute
+  '/admin': typeof AdminRoute
+  '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido': typeof PedidoIndexRoute
+  '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/produtos/$slug': typeof ProdutosSlugRoute
+  '/admin': typeof AdminRoute
+  '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
+  '/pedido/$token': typeof PedidoTokenRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
+  '/pedido/': typeof PedidoIndexRoute
+  '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/produtos/$slug'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/cardapio'
+    | '/checkout'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido/'
+    | '/api/public/webhooks/mercadopago'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/produtos/$slug'
-  id: '__root__' | '/' | '/sitemap.xml' | '/produtos/$slug'
+  to:
+    | '/'
+    | '/admin'
+    | '/cardapio'
+    | '/checkout'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido'
+    | '/api/public/webhooks/mercadopago'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/cardapio'
+    | '/checkout'
+    | '/pedido/$token'
+    | '/produto/$slug'
+    | '/pedido/'
+    | '/api/public/webhooks/mercadopago'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  ProdutosSlugRoute: typeof ProdutosSlugRoute
+  AdminRoute: typeof AdminRoute
+  CardapioRoute: typeof CardapioRoute
+  CheckoutRoute: typeof CheckoutRoute
+  PedidoTokenRoute: typeof PedidoTokenRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
+  PedidoIndexRoute: typeof PedidoIndexRoute
+  ApiPublicWebhooksMercadopagoRoute: typeof ApiPublicWebhooksMercadopagoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,18 +144,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/produtos/$slug': {
-      id: '/produtos/$slug'
-      path: '/produtos/$slug'
-      fullPath: '/produtos/$slug'
-      preLoaderRoute: typeof ProdutosSlugRouteImport
+    '/cardapio': {
+      id: '/cardapio'
+      path: '/cardapio'
+      fullPath: '/cardapio'
+      preLoaderRoute: typeof CardapioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pedido/': {
+      id: '/pedido/'
+      path: '/pedido'
+      fullPath: '/pedido/'
+      preLoaderRoute: typeof PedidoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pedido/$token': {
+      id: '/pedido/$token'
+      path: '/pedido/$token'
+      fullPath: '/pedido/$token'
+      preLoaderRoute: typeof PedidoTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/webhooks/mercadopago': {
+      id: '/api/public/webhooks/mercadopago'
+      path: '/api/public/webhooks/mercadopago'
+      fullPath: '/api/public/webhooks/mercadopago'
+      preLoaderRoute: typeof ApiPublicWebhooksMercadopagoRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -87,8 +198,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
-  ProdutosSlugRoute: ProdutosSlugRoute,
+  AdminRoute: AdminRoute,
+  CardapioRoute: CardapioRoute,
+  CheckoutRoute: CheckoutRoute,
+  PedidoTokenRoute: PedidoTokenRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
+  PedidoIndexRoute: PedidoIndexRoute,
+  ApiPublicWebhooksMercadopagoRoute: ApiPublicWebhooksMercadopagoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

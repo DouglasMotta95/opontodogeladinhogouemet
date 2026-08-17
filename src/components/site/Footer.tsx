@@ -1,108 +1,115 @@
-import { Instagram, Facebook, MapPin, Clock, Phone } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/reizinho-logo.jpg.asset.json";
-import {
-  FACEBOOK_URL,
-  INSTAGRAM_URL,
-  WHATSAPP_DISPLAY,
-  WHATSAPP_URL,
-} from "@/lib/site";
-import { WhatsAppIcon } from "./WhatsAppButton";
+import { useQuery } from "@tanstack/react-query";
+import { Clock, Instagram, Facebook, MapPin, Phone } from "lucide-react";
+import { businessHoursQuery, settingsQuery, WEEKDAYS, whatsappLink } from "@/lib/shop-data";
 
 export function Footer() {
+  const { data: settings } = useQuery(settingsQuery);
+  const { data: hours } = useQuery(businessHoursQuery);
+  const store = settings?.store;
+  const wa = store?.whatsapp ? whatsappLink(store.whatsapp, "Olá! Quero fazer um pedido.") : null;
+
   return (
-    <footer className="border-t border-gold/20 bg-ivory">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-4 lg:px-8">
-        <div className="space-y-5">
-          <Link to="/" aria-label="Reizinho Joias">
-            <img
-              src={logo.url}
-              alt="Reizinho Joias"
-              width={80}
-              height={80}
-              loading="lazy"
-              className="h-20 w-20 rounded-full object-contain"
-            />
-          </Link>
+    <footer className="mt-20 border-t border-border bg-cream">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
+        <div className="space-y-4">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-lg font-black text-primary-foreground">
+            PG
+          </span>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Joias que eternizam momentos. Peças selecionadas, atendimento humano e
-            entrega segura para todo o Brasil.
+            Geladinho gourmet artesanal, feito com fruta de verdade e muito capricho. Peça online e
+            receba geladinho na porta da sua casa.
           </p>
         </div>
 
         <div>
           <h3 className="eyebrow">Navegação</h3>
-          <ul className="mt-5 space-y-2.5 text-sm text-muted-foreground">
-            {[
-              ["Início", "/#inicio"],
-              ["Coleções", "/#colecoes"],
-              ["Lançamentos", "/#lancamentos"],
-              ["Mais Vendidos", "/#mais-vendidos"],
-              ["Sobre", "/#sobre"],
-              ["Avaliações", "/#avaliacoes"],
-              ["Perguntas Frequentes", "/#faq"],
-            ].map(([label, href]) => (
-              <li key={href}>
-                <a href={href} className="transition-colors hover:text-gold-deep">
-                  {label}
-                </a>
-              </li>
-            ))}
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li>
+              <Link to="/" className="transition-colors hover:text-brand-deep">
+                Início
+              </Link>
+            </li>
+            <li>
+              <Link to="/cardapio" className="transition-colors hover:text-brand-deep">
+                Cardápio
+              </Link>
+            </li>
+            <li>
+              <Link to="/pedido" className="transition-colors hover:text-brand-deep">
+                Acompanhar pedido
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin" className="transition-colors hover:text-brand-deep">
+                Área administrativa
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <h3 className="eyebrow">Contato</h3>
-          <ul className="mt-5 space-y-3.5 text-sm text-muted-foreground">
-            <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-gold" strokeWidth={1.5} />
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-gold-deep"
-              >
-                {WHATSAPP_DISPLAY}
-              </a>
+          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+            {wa && (
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-brand" strokeWidth={1.6} />
+                <a href={wa} target="_blank" rel="noopener noreferrer">
+                  {store?.whatsapp}
+                </a>
+              </li>
+            )}
+            <li className="flex items-start gap-2">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.6} />
+              {store?.address || `${store?.city ?? ""}${store?.state ? ` — ${store.state}` : ""}`}
             </li>
-            <li className="flex items-start gap-2.5">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} />
-              Macaé — Rio de Janeiro, Brasil
-            </li>
-            <li className="flex items-start gap-2.5">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} />
-              Seg. a Sex. 9h — 18h • Sáb. 9h — 13h
+            <li className="flex gap-3 pt-1">
+              {settings?.social.instagram && (
+                <a
+                  href={settings.social.instagram}
+                  aria-label="Instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-border p-2 transition-colors hover:text-brand-deep"
+                >
+                  <Instagram className="h-4 w-4" />
+                </a>
+              )}
+              {settings?.social.facebook && (
+                <a
+                  href={settings.social.facebook}
+                  aria-label="Facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-border p-2 transition-colors hover:text-brand-deep"
+                >
+                  <Facebook className="h-4 w-4" />
+                </a>
+              )}
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="eyebrow">Redes Sociais</h3>
-          <div className="mt-5 flex gap-3">
-            {[
-              { href: INSTAGRAM_URL, Icon: Instagram, label: "Instagram" },
-              { href: FACEBOOK_URL, Icon: Facebook, label: "Facebook" },
-              { href: WHATSAPP_URL, Icon: WhatsAppIcon, label: "WhatsApp" },
-            ].map(({ href, Icon, label }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-gold/35 p-3 text-ink/80 transition-all duration-500 hover:-translate-y-0.5 hover:border-gold hover:text-gold-deep"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
+          <h3 className="eyebrow">Horários</h3>
+          <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
+            {(hours ?? []).map((h) => (
+              <li key={h.id} className="flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 text-brand" strokeWidth={1.6} />
+                <span className="w-28">{WEEKDAYS[h.weekday]}</span>
+                <span>
+                  {h.is_open && h.opens_at && h.closes_at
+                    ? `${h.opens_at.slice(0, 5)} — ${h.closes_at.slice(0, 5)}`
+                    : "Fechado"}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
-      <div className="hairline" />
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-muted-foreground lg:flex-row lg:px-8">
-        <p>© {new Date().getFullYear()} Reizinho Joias. Todos os direitos reservados.</p>
-        <p className="tracking-[0.2em] uppercase">Elegância • Exclusividade • Sofisticação</p>
+      <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
+        © {new Date().getFullYear()} O Ponto do Geladinho Gourmet. Todos os direitos reservados.
       </div>
     </footer>
   );
