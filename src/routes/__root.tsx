@@ -79,15 +79,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Reizinho Joias | Elegância, Exclusividade e Sofisticação" },
+      { title: "O Ponto do Geladinho Gourmet | Peça online e receba em casa" },
       {
         name: "description",
         content:
-          "Conheça a Reizinho Joias. Joias premium, atendimento personalizado e compra fácil pelo WhatsApp.",
+          "Geladinho gourmet artesanal feito com fruta de verdade. Peça online e receba em casa.",
       },
-      { name: "author", content: "Reizinho Joias" },
+      { name: "author", content: "O Ponto do Geladinho Gourmet" },
       { name: "theme-color", content: "#ffffff" },
-      { property: "og:site_name", content: "Reizinho Joias" },
+      { property: "og:site_name", content: "O Ponto do Geladinho Gourmet" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
