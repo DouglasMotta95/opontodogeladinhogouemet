@@ -64,7 +64,6 @@ export function Footer() {
               {store?.address || `${store?.city ?? ""}${store?.state ? ` — ${store.state}` : ""}`}
             </li>
             <li className="flex gap-3 pt-1">
-              {store?.instagram_placeholder}
               {settings?.social.instagram && (
                 <a
                   href={settings.social.instagram}
