@@ -78,7 +78,10 @@ function Checkout() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (items.length === 0) return toast.error("Seu carrinho está vazio.");
+    if (items.length === 0) {
+      toast.error("Seu carrinho está vazio.");
+      return;
+    }
     setSubmitting(true);
     try {
       const result = await createOrder({

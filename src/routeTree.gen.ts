@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CardapioRouteImport } from './routes/cardapio'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as PedidoIndexRouteImport } from './routes/pedido.index'
 import { Route as PedidoTokenRouteImport } from './routes/pedido.$token'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
@@ -21,9 +23,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CardapioRoute = CardapioRouteImport.update({
   id: '/cardapio',
   path: '/cardapio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PedidoIndexRoute = PedidoIndexRouteImport.update({
@@ -50,7 +62,9 @@ const ApiPublicWebhooksMercadopagoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
   '/pedido/$token': typeof PedidoTokenRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/pedido/': typeof PedidoIndexRoute
@@ -58,7 +72,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
   '/pedido/$token': typeof PedidoTokenRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/pedido': typeof PedidoIndexRoute
@@ -67,7 +83,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cardapio': typeof CardapioRoute
+  '/checkout': typeof CheckoutRoute
   '/pedido/$token': typeof PedidoTokenRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/pedido/': typeof PedidoIndexRoute
@@ -77,7 +95,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/cardapio'
+    | '/checkout'
     | '/pedido/$token'
     | '/produto/$slug'
     | '/pedido/'
@@ -85,7 +105,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/cardapio'
+    | '/checkout'
     | '/pedido/$token'
     | '/produto/$slug'
     | '/pedido'
@@ -93,7 +115,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/cardapio'
+    | '/checkout'
     | '/pedido/$token'
     | '/produto/$slug'
     | '/pedido/'
@@ -102,7 +126,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CardapioRoute: typeof CardapioRoute
+  CheckoutRoute: typeof CheckoutRoute
   PedidoTokenRoute: typeof PedidoTokenRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   PedidoIndexRoute: typeof PedidoIndexRoute
@@ -118,11 +144,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cardapio': {
       id: '/cardapio'
       path: '/cardapio'
       fullPath: '/cardapio'
       preLoaderRoute: typeof CardapioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pedido/': {
@@ -158,7 +198,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CardapioRoute: CardapioRoute,
+  CheckoutRoute: CheckoutRoute,
   PedidoTokenRoute: PedidoTokenRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
   PedidoIndexRoute: PedidoIndexRoute,
