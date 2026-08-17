@@ -77,7 +77,7 @@ export const createPixPayment = createServerFn({ method: "POST" })
       qr_code: tx?.qr_code ?? null,
       qr_code_base64: tx?.qr_code_base64 ?? null,
       checkout_url: tx?.ticket_url ?? null,
-      raw: payload as unknown as Record<string, unknown>,
+      raw: payload as unknown as never,
     });
 
     return {

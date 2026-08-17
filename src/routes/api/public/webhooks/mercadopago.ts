@@ -56,7 +56,7 @@ export const Route = createFileRoute("/api/public/webhooks/mercadopago")({
 
         await supabaseAdmin
           .from("payments")
-          .update({ status: payment.status, raw: payment as unknown as Record<string, unknown> })
+          .update({ status: payment.status, raw: payment as unknown as never })
           .eq("id", (row as { id: string }).id);
 
         await supabaseAdmin
