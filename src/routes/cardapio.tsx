@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { Search, ShoppingBag, SlidersHorizontal, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { categoriesQuery, productsQuery, settingsQuery } from "@/lib/shop-data";
+import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ function Cardapio() {
   const { data: categories } = useQuery(categoriesQuery);
   const { data: products, isLoading } = useQuery(productsQuery);
   const { data: settings } = useQuery(settingsQuery);
+  const { count, subtotal, setOpen: setCartOpen } = useCart();
   const [active, setActive] = useState<string | "all">("all");
   const [search, setSearch] = useState("");
 
@@ -59,7 +61,7 @@ function Cardapio() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8 lg:py-8">
+      <div className={cn("mx-auto max-w-7xl px-4 py-6 lg:px-8 lg:py-8", count > 0 && "pb-28 lg:pb-8") }>
         <div className="sticky top-[83px] z-30 -mx-4 mb-7 border-y border-border/60 bg-background/95 px-4 py-3 backdrop-blur-xl md:top-[87px] lg:mx-0 lg:rounded-3xl lg:border lg:p-3 lg:shadow-sm">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
             <div className="relative min-w-0 flex-1">
@@ -92,6 +94,15 @@ function Cardapio() {
           </div>
         )}
       </div>
+
+      {count > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/96 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-12px_35px_rgba(36,16,13,.12)] backdrop-blur-xl lg:hidden">
+          <button type="button" onClick={() => setCartOpen(true)} className="mx-auto flex h-14 w-full max-w-xl items-center justify-between rounded-2xl bg-brand px-4 text-primary-foreground shadow-lg">
+            <span className="flex items-center gap-3"><span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><ShoppingBag className="h-5 w-5" /><span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-mango px-1 text-[.65rem] font-black text-ink">{count}</span></span><span className="text-left"><span className="block text-xs font-semibold text-white/70">Seu pedido</span><span className="block text-sm font-black">Ver carrinho</span></span></span>
+            <span className="text-base font-black">{brl(subtotal)} →</span>
+          </button>
+        </div>
+      )}
     </SiteLayout>
   );
 }
