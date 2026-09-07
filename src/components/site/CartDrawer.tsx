@@ -138,11 +138,22 @@ export function CartDrawer() {
             </p>
           )}
 
-          <Button asChild size="lg" className="w-full" disabled={!canCheckout}>
-            <Link to="/checkout" onClick={() => setOpen(false)}>
-              Ir para entrega e pagamento
-            </Link>
-          </Button>
+          {canCheckout ? (
+            <Button asChild size="lg" className="w-full">
+              <Link to="/checkout" onClick={() => setOpen(false)}>
+                Ir para entrega e pagamento
+              </Link>
+            </Button>
+          ) : (
+            <Button size="lg" className="w-full" disabled>
+              {items.length === 0
+                ? "Adicione itens ao pedido"
+                : missing > 0
+                  ? `Faltam ${brl(missing)}`
+                  : "Pedidos indisponíveis"}
+            </Button>
+          )}
+
           {items.length > 0 && (
             <Button asChild variant="ghost" className="w-full" onClick={() => setOpen(false)}>
               <Link to="/cardapio">Adicionar mais sabores</Link>
