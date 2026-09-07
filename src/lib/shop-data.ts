@@ -104,7 +104,7 @@ export const DEFAULT_SETTINGS: SettingsBundle = {
     scheduling_enabled: true,
     restrict_delivery_area: true,
     accepting_orders: true,
-    min_order: 0,
+    min_order: 20,
   },
   social: { instagram: "", facebook: "", ifood: "", food99: "" },
   marketing: { meta_pixel_id: "", ga_measurement_id: "" },
@@ -136,6 +136,7 @@ export const productsQuery = queryOptions({
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .eq("is_demo", false)
       .order("sort_order");
     if (error) throw error;
     return (data ?? []).map((p) => ({
