@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Plus, ShoppingBag } from "lucide-react";
+import { Plus, ShoppingBag, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
@@ -10,6 +10,8 @@ export function ProductCard({ product }: { product: Product }) {
   const { add, setOpen } = useCart();
   const hasStock = product.stock == null || product.stock > 0;
   const canAdd = product.is_available && hasStock;
+  const hasDiscount =
+    product.compare_at_price != null && Number(product.compare_at_price) > Number(product.price);
 
   const addToCart = () => {
     if (!canAdd) return;
@@ -25,11 +27,11 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-pop">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.6rem] border border-border/80 bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-pop">
       <Link
         to="/produto/$slug"
         params={{ slug: product.slug }}
-        className="relative block aspect-square overflow-hidden bg-muted"
+        className="relative block aspect-[4/3] overflow-hidden bg-muted sm:aspect-square"
       >
         {product.image_url ? (
           <img
@@ -39,21 +41,27 @@ export function ProductCard({ product }: { product: Product }) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-5xl">🍧</div>
+          <div className="flex h-full items-center justify-center bg-cream text-5xl">🍧</div>
         )}
 
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+        <div className="absolute top-3 left-3 flex max-w-[75%] flex-col gap-1.5">
           {product.is_best_seller && (
-            <span className="rounded-full bg-mango px-2.5 py-1 text-[0.65rem] font-bold tracking-wide text-ink uppercase shadow-sm">
+            <span className="w-fit rounded-full bg-mango px-2.5 py-1 text-[0.64rem] font-extrabold tracking-wide text-ink uppercase shadow-sm">
               Mais vendido
             </span>
           )}
           {product.is_combo && (
-            <span className="rounded-full bg-brand px-2.5 py-1 text-[0.65rem] font-bold tracking-wide text-primary-foreground uppercase shadow-sm">
+            <span className="w-fit rounded-full bg-brand px-2.5 py-1 text-[0.64rem] font-extrabold tracking-wide text-primary-foreground uppercase shadow-sm">
               {product.combo_units ? `Combo ${product.combo_units} un.` : "Combo"}
             </span>
           )}
         </div>
+
+        {product.is_featured && !product.is_best_seller && (
+          <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-background/95 px-2.5 py-1 text-[0.64rem] font-bold text-brand-deep shadow-sm backdrop-blur">
+            <Sparkles className="h-3 w-3" /> Destaque
+          </span>
+        )}
 
         {!canAdd && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/75 backdrop-blur-[1px]">
@@ -64,37 +72,44 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
         <Link to="/produto/$slug" params={{ slug: product.slug }} className="block">
-          <h3 className="font-display text-lg leading-snug font-bold text-ink transition-colors group-hover:text-brand-deep">
+          <h3 className="font-display text-lg leading-snug font-extrabold text-ink transition-colors group-hover:text-brand-deep">
             {product.name}
           </h3>
         </Link>
 
         {product.description && (
-          <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-1.5 line-clamp-2 min-h-10 text-sm leading-relaxed text-muted-foreground">
             {product.description}
           </p>
         )}
 
         {product.stock != null && product.stock > 0 && product.stock <= 5 && (
-          <p className="mt-2 text-xs font-semibold text-destructive">Só {product.stock} em estoque</p>
+          <p className="mt-2 text-xs font-semibold text-destructive">Últimas {product.stock} unidades</p>
         )}
 
         <div className="mt-auto pt-4">
-          <div className="mb-3 flex items-end gap-2">
-            <span className="text-xl font-extrabold text-brand-deep">{brl(Number(product.price))}</span>
-            {product.compare_at_price && Number(product.compare_at_price) > Number(product.price) && (
-              <span className="pb-0.5 text-xs text-muted-foreground line-through">
-                {brl(Number(product.compare_at_price))}
-              </span>
-            )}
+          <div className="mb-3 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[0.68rem] font-semibold tracking-wide text-muted-foreground uppercase">
+                {product.is_combo ? "Valor do combo" : "Por unidade"}
+              </p>
+              <div className="mt-0.5 flex items-end gap-2">
+                <span className="text-xl font-extrabold text-brand-deep">{brl(Number(product.price))}</span>
+                {hasDiscount && (
+                  <span className="pb-0.5 text-xs text-muted-foreground line-through">
+                    {brl(Number(product.compare_at_price))}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
-          <Button className="w-full" onClick={addToCart} disabled={!canAdd}>
+          <Button className="w-full rounded-xl" onClick={addToCart} disabled={!canAdd}>
             {canAdd ? (
               <>
-                <Plus className="h-4 w-4" /> Adicionar ao pedido
+                <Plus className="h-4 w-4" /> Adicionar
               </>
             ) : (
               <>
