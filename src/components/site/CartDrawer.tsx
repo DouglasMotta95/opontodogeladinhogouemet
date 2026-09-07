@@ -1,20 +1,28 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
+import { CheckCircle2, Flame, Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/format";
-import { settingsQuery } from "@/lib/shop-data";
+import { productsQuery, settingsQuery } from "@/lib/shop-data";
 
 export function CartDrawer() {
-  const { items, isOpen, setOpen, setQuantity, remove, subtotal } = useCart();
+  const { items, isOpen, setOpen, setQuantity, remove, subtotal, add } = useCart();
   const { data: settings } = useQuery(settingsQuery);
+  const { data: products } = useQuery(productsQuery);
   const minOrder = Number(settings?.store.min_order ?? 0);
   const missing = Math.max(minOrder - subtotal, 0);
   const canCheckout = items.length > 0 && missing <= 0 && settings?.store.accepting_orders !== false;
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const progress = minOrder > 0 ? Math.min((subtotal / minOrder) * 100, 100) : 100;
+  const inCart = new Set(items.map((item) => item.productId));
+  const recommendation = (products ?? [])
+    .filter((product) => product.is_available && !inCart.has(product.id) && (product.stock == null || product.stock > 0))
+    .sort((a, b) => {
+      const score = (slug: string) => slug === "morango-cravejado" ? 3 : slug === "pudim" ? 2 : 0;
+      return score(b.slug) - score(a.slug);
+    })[0];
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -59,6 +67,17 @@ export function CartDrawer() {
               </div>
             </div>
           ))}
+
+          {items.length > 0 && recommendation && (
+            <div className="rounded-3xl border border-pink-200 bg-pink-50/80 p-3 shadow-sm">
+              <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-brand-deep"><Flame className="h-4 w-4" /> Aproveite e experimente</div>
+              <div className="flex items-center gap-3">
+                {recommendation.image_url ? <img src={recommendation.image_url} alt={recommendation.name} className="h-16 w-16 rounded-2xl object-cover" /> : <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-2xl">🍧</div>}
+                <div className="min-w-0 flex-1"><p className="truncate text-sm font-black text-ink">{recommendation.name}</p><p className="text-xs text-muted-foreground">Uma das escolhas que mais chamam atenção.</p><p className="mt-1 font-black text-brand-deep">{brl(Number(recommendation.price))}</p></div>
+                <button type="button" onClick={() => add({ productId: recommendation.id, name: recommendation.name, slug: recommendation.slug, price: Number(recommendation.price), imageUrl: recommendation.image_url })} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand text-primary-foreground shadow-sm" aria-label={`Adicionar ${recommendation.name}`}><Plus className="h-5 w-5" /></button>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="space-y-3 border-t border-border bg-background p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
