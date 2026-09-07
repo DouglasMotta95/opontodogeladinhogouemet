@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Clock3, MapPin, ShieldCheck, Snowflake, Sparkles, Star, Truck } from "lucide-react";
+import { ArrowRight, Clock3, Flame, MapPin, ShieldCheck, Snowflake, Sparkles, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
@@ -26,8 +26,9 @@ function Home() {
   const { data: settings } = useQuery(settingsQuery);
   const { data: areas } = useQuery(deliveryAreasQuery);
   const available = (products ?? []).filter((p) => p.is_available);
-  const featured = available.filter((p) => p.is_featured || p.is_best_seller).slice(0, 8);
-  const showcase = (featured.length ? featured : available).slice(0, 8);
+  const sensations = ["morango-cravejado", "pudim"].map((slug) => available.find((p) => p.slug === slug)).filter(Boolean) as typeof available;
+  const featured = available.filter((p) => p.is_featured || p.is_best_seller).filter((p) => !sensations.some((s) => s.id === p.id)).slice(0, 8);
+  const showcase = (featured.length ? featured : available.filter((p) => !sensations.some((s) => s.id === p.id))).slice(0, 8);
   const activeAreas = (areas ?? []).filter((a) => a.is_active);
   const fees = activeAreas.map((a) => Number(a.delivery_fee));
   const minFee = fees.length ? Math.min(...fees) : null;
@@ -67,9 +68,21 @@ function Home() {
       </div>
     </section>
 
+    {sensations.length > 0 && (
+      <section className="mx-auto max-w-7xl px-4 pt-14 lg:px-8">
+        <div className="overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-[#fff2f6] via-[#fff8fa] to-[#fff3e8] p-5 shadow-[0_18px_55px_rgba(88,22,36,.08)] sm:p-7 lg:p-9">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div><p className="flex items-center gap-2 text-xs font-black tracking-[.16em] text-brand-deep uppercase"><Flame className="h-4 w-4" /> Sensações do momento</p><h2 className="mt-2 font-display text-3xl font-black text-ink md:text-4xl">Os sabores que todo mundo quer provar.</h2><p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Morango Cravejado e Pudim estão em destaque por aqui. Se ainda não provou, começa por eles.</p></div>
+            <Button asChild variant="outline" className="w-fit rounded-full bg-white"><Link to="/cardapio">Ver cardápio completo</Link></Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">{sensations.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+        </div>
+      </section>
+    )}
+
     <section className="mx-auto max-w-7xl px-4 py-14 lg:px-8">
       <div className="mb-7 flex items-end justify-between gap-4">
-        <div><p className="eyebrow">Escolha seu favorito</p><h2 className="font-display text-3xl font-black text-ink md:text-4xl">Sabores em destaque</h2><p className="mt-2 text-muted-foreground">Deslize, escolha e adicione ao seu pedido.</p></div>
+        <div><p className="eyebrow">Escolha seu favorito</p><h2 className="font-display text-3xl font-black text-ink md:text-4xl">Mais sabores para se apaixonar</h2><p className="mt-2 text-muted-foreground">Deslize, escolha e adicione ao seu pedido.</p></div>
         <Button asChild variant="outline" className="hidden rounded-full sm:inline-flex"><Link to="/cardapio">Ver todos</Link></Button>
       </div>
       <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
