@@ -76,14 +76,36 @@ export const createOrder = createServerFn({ method: "POST" })
     const { data: settingRows } = await supabaseAdmin
       .from("settings")
       .select("key,value")
-      .in("key", ["store"]);
-    const store = ((settingRows ?? [])[0] as { value?: Record<string, unknown> } | undefined)
-      ?.value as Record<string, unknown> | undefined;
+      .in("key", ["store", "payments"]);
+
+    const rowMap = Object.fromEntries(
+      (settingRows ?? []).map((row) => [
+        (row as { key: string }).key,
+        (row as { value?: Record<string, unknown> }).value ?? {},
+      ]),
+    ) as Record<string, Record<string, unknown>>;
+
+    const store = rowMap.store;
+    const payments = rowMap.payments;
+
     if (store && store["accepting_orders"] === false) {
       throw new Error("A loja não está recebendo pedidos no momento.");
     }
     if (data.fulfillment === "pickup" && store && store["pickup_enabled"] === false) {
       throw new Error("A retirada no local está desativada.");
+    }
+
+    const paymentEnabled =
+      data.paymentMethod === "pix"
+        ? payments?.["pix_enabled"] === true
+        : data.paymentMethod === "online_card"
+          ? payments?.["mercadopago_enabled"] === true
+          : data.paymentMethod === "cash"
+            ? payments?.["cash_enabled"] !== false
+            : payments?.["card_on_delivery_enabled"] !== false;
+
+    if (!paymentEnabled) {
+      throw new Error("A forma de pagamento selecionada não está disponível no momento.");
     }
 
     const ids = data.items.map((i) => i.productId);
@@ -96,9 +118,18 @@ export const createOrder = createServerFn({ method: "POST" })
     const lines = data.items.map((item) => {
       const product = (products ?? []).find(
         (p) => (p as { id: string }).id === item.productId,
-      ) as { id: string; name: string; price: number; is_available: boolean } | undefined;
+      ) as {
+        id: string;
+        name: string;
+        price: number;
+        is_available: boolean;
+        stock: number | null;
+      } | undefined;
       if (!product) throw new Error("Produto indisponível no carrinho.");
       if (!product.is_available) throw new Error(`${product.name} está esgotado no momento.`);
+      if (product.stock != null && item.quantity > Number(product.stock)) {
+        throw new Error(`Temos apenas ${product.stock} unidade(s) de ${product.name} disponíveis.`);
+      }
       const unit = Number(product.price);
       return {
         product_id: product.id,
@@ -110,8 +141,11 @@ export const createOrder = createServerFn({ method: "POST" })
     });
 
     const subtotal = Number(lines.reduce((acc, l) => acc + l.line_total, 0).toFixed(2));
+    const storeMinOrder = Number(store?.["min_order"] ?? 0);
+    if (storeMinOrder > 0 && subtotal < storeMinOrder) {
+      throw new Error(`O pedido mínimo da loja é de R$ ${storeMinOrder.toFixed(2)}.`);
+    }
 
-    // Delivery fee comes from the configured neighborhoods, never from the client.
     let deliveryFee = 0;
     let areaId: string | null = null;
     if (data.fulfillment === "delivery") {
