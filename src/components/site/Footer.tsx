@@ -13,12 +13,15 @@ export function Footer() {
     <footer className="mt-20 border-t border-border bg-cream">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-4 lg:px-8">
         <div className="space-y-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-lg font-black text-primary-foreground">
-            PG
-          </span>
+          <img
+            src={logoAsset.url}
+            alt="O Ponto do Geladinho Gourmet"
+            className="h-20 w-20 rounded-full object-cover shadow-card"
+            loading="lazy"
+          />
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Geladinho gourmet artesanal, feito com fruta de verdade e muito capricho. Peça online e
-            receba geladinho na porta da sua casa.
+            Cremosos, recheados e irresistíveis. Feito em família para adoçar momentos em família —
+            peça sem sair de casa.
           </p>
         </div>
 

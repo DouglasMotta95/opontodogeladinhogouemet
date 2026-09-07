@@ -43,9 +43,11 @@ export function Header() {
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 lg:px-8">
         <Link to="/" className="flex items-center gap-3" aria-label="O Ponto do Geladinho Gourmet">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-gradient text-lg font-black text-primary-foreground">
-            PG
-          </span>
+          <img
+            src={logoAsset.url}
+            alt="O Ponto do Geladinho Gourmet"
+            className="h-14 w-14 rounded-full object-cover shadow-card sm:h-16 sm:w-16"
+          />
           <span className="leading-tight">
             <span className="block text-xs tracking-[0.24em] text-brand-deep uppercase">
               O Ponto do
