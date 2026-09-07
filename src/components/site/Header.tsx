@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import logoAsset from "@/assets/logo.png.asset.json";
 import { useCart } from "@/lib/cart";
 import { businessHoursQuery, isStoreOpenNow, settingsQuery, whatsappLink } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";

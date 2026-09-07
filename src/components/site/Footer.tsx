@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Clock, Instagram, Facebook, MapPin, Phone } from "lucide-react";
 import { businessHoursQuery, settingsQuery, WEEKDAYS, whatsappLink } from "@/lib/shop-data";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export function Footer() {
   const { data: settings } = useQuery(settingsQuery);
